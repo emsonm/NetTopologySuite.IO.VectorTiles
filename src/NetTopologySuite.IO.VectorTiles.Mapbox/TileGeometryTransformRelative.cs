@@ -26,7 +26,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
         {
             _extent = extent;
             _newExtent = newExtent;
-            _factor = _newExtent / _extent;
+            _factor = (double)_newExtent / (double)_extent;
 
             // Precalculate the resolution of the tile for the specified zoom level.
             ZoomResolution = WebMercatorHandler.Resolution(tile.Zoom, (int)extent);
