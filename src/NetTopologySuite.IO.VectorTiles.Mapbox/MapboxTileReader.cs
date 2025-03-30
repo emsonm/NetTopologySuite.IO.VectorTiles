@@ -1,16 +1,20 @@
+using NetTopologySuite.Features;
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Xml.Linq;
-using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO.VectorTiles.Mapbox
 {
     public class MapboxTileReader
     {
         private readonly GeometryFactory _factory;
+
+        /// <summary>
+        /// The default attribute name of a feature's identifier
+        /// </summary>
+        public const string DefaultIdAttributeName = "id";
 
         public MapboxTileReader()
             : this(new GeometryFactory(new PrecisionModel(), 4326))
@@ -40,7 +44,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
         /// <param name="tileDefinition">Tile information.</param>
         /// <param name="idAttributeName">Optional. Specifies the name of the attribute that the vector tile feature's ID should be stored in the NetTopologySuite Features AttributeTable.</param>
         /// <returns></returns>
-        public VectorTile Read(Stream stream, Tiles.Tile tileDefinition, string idAttributeName, Func<Tiles.Tile, uint, ITileGeometryTransform> tgtFactory = null)
+        public VectorTile Read(Stream stream, Tiles.Tile tileDefinition, string idAttributeName = DefaultIdAttributeName, Func<Tiles.Tile, uint, ITileGeometryTransform> tgtFactory = null)
         {
             // Deserialize the tile
             var tile = ProtoBuf.Serializer.Deserialize<Mapbox.Tile>(stream);

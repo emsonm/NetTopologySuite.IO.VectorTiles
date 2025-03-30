@@ -114,7 +114,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
         /// <param name="idAttributeName">The name of an attribute property to use as the ID for the Feature. Vector tile feature ID's should be integer or ulong numbers.</param>
         /// <param name="tgtFactory">Function creating a tile geometry transformation object.</param>
         [Obsolete("Use overload that can specify minLineal- and minPolygonalExtent")]
-        public static void Write(this VectorTile vectorTile, Stream stream, uint extent = 4096, string idAttributeName = "id", Func<Tiles.Tile, uint, ITileGeometryTransform> tgtFactory = null)
+        public static void Write(this VectorTile vectorTile, Stream stream, uint extent = 4096, string idAttributeName = DefaultIdAttributeName, Func<Tiles.Tile, uint, ITileGeometryTransform> tgtFactory = null)
             => Write(vectorTile, stream, DefaultMinLinealExtent, DefaultMinPolygonalExtent, extent, idAttributeName, tgtFactory);
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
         /// <param name="idAttributeName">The name of an attribute property to use as the ID for the Feature. Vector tile feature ID's should be integer or ulong numbers.</param>
         /// <param name="tgtFactory">Function creating a tile geometry transformation object.</param>
         public static void Write(this VectorTile vectorTile, Stream stream, uint minLinealExtent, uint minPolygonalExtent,
-            uint extent = 4096, string idAttributeName = "id", Func<Tiles.Tile, uint, ITileGeometryTransform> tgtFactory = null)
+            uint extent = 4096, string idAttributeName = DefaultIdAttributeName, Func<Tiles.Tile, uint, ITileGeometryTransform> tgtFactory = null)
         {
             // ensure valid minimal polygonal extent
             if (minPolygonalExtent < 1) minPolygonalExtent = 1;
