@@ -7,7 +7,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
     /// <summary>
     /// A transformation utility from WGS84 coordinates to a local tile coordinate system in pixel
     /// </summary>
-    internal interface ITileGeometryTransform
+    public interface ITileGeometryTransform
     {
         /// <summary>
         /// The zoom level pixel resolution based on the extent.
