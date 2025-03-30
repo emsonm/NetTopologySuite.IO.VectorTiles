@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Xml.Linq;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 
@@ -9,8 +10,6 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
 {
     public class MapboxTileReader
     {
-
-
         private readonly GeometryFactory _factory;
 
         public MapboxTileReader()
@@ -29,9 +28,9 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
         /// <param name="stream">Vector tile stream.</param>
         /// <param name="tileDefinition">Tile information.</param>
         /// <returns></returns>
-        public VectorTile Read(Stream stream, Tiles.Tile tileDefinition)
+        public VectorTile Read(Stream stream, Tiles.Tile tileDefinition, Func<Tiles.Tile, uint, ITileGeometryTransform> tgtFactory = null)
         {
-            return Read(stream, tileDefinition, null);
+            return Read(stream, tileDefinition, null, tgtFactory);
         }
 
         /// <summary>
@@ -41,10 +40,8 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
         /// <param name="tileDefinition">Tile information.</param>
         /// <param name="idAttributeName">Optional. Specifies the name of the attribute that the vector tile feature's ID should be stored in the NetTopologySuite Features AttributeTable.</param>
         /// <returns></returns>
-        public VectorTile Read(Stream stream, Tiles.Tile tileDefinition, string idAttributeName)
+        public VectorTile Read(Stream stream, Tiles.Tile tileDefinition, string idAttributeName, Func<Tiles.Tile, uint, ITileGeometryTransform> tgtFactory = null)
         {
-
-
             // Deserialize the tile
             var tile = ProtoBuf.Serializer.Deserialize<Mapbox.Tile>(stream);
 
@@ -53,7 +50,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
             {
                 Debug.Assert(mbTileLayer.Version == 2U);
 
-                var tgs = new TileGeometryTransform(tileDefinition, mbTileLayer.Extent);
+                var tgs = tgtFactory == null ? new TileGeometryTransform(tileDefinition, mbTileLayer.Extent) : tgtFactory(tileDefinition, mbTileLayer.Extent);
                 var layer = new Layer {Name = mbTileLayer.Name};
                 foreach (var mbTileFeature in mbTileLayer.Features)
                 {
