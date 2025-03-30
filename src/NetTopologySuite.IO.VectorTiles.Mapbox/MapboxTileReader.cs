@@ -66,7 +66,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
             return vectorTile;
         }
 
-        private IFeature ReadFeature(TileGeometryTransform tgs, Tile.Layer mbTileLayer, Tile.Feature mbTileFeature, string idAttributeName)
+        private IFeature ReadFeature(ITileGeometryTransform tgs, Tile.Layer mbTileLayer, Tile.Feature mbTileFeature, string idAttributeName)
         {
             var geometry = ReadGeometry(tgs, mbTileFeature.Type, mbTileFeature.Geometry);
             var attributes = ReadAttributeTable(mbTileFeature, mbTileLayer.Keys, mbTileLayer.Values);
@@ -81,7 +81,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
             return new Feature(geometry, attributes);
         }
 
-        private Geometry ReadGeometry(TileGeometryTransform tgs, Tile.GeomType type, IList<uint> geometry)
+        private Geometry ReadGeometry(ITileGeometryTransform tgs, Tile.GeomType type, IList<uint> geometry)
         {
             switch (type)
             {
@@ -98,21 +98,21 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
             return null;
         }
 
-        private Geometry ReadPoint(TileGeometryTransform tgs, IList<uint> geometry)
+        private Geometry ReadPoint(ITileGeometryTransform tgs, IList<uint> geometry)
         {
             int currentIndex = 0; int currentX = 0; int currentY = 0;
             var sequences = ReadCoordinateSequences(tgs, geometry, ref currentIndex, ref currentX, ref currentY, forPoint:true);
             return CreatePuntal(sequences);
         }
 
-        private Geometry ReadLineString(TileGeometryTransform tgs, IList<uint> geometry)
+        private Geometry ReadLineString(ITileGeometryTransform tgs, IList<uint> geometry)
         {
             int currentIndex = 0; int currentX = 0; int currentY = 0;
             var sequences = ReadCoordinateSequences(tgs, geometry, ref currentIndex, ref currentX, ref currentY);
             return CreateLineal(sequences);
         }
 
-        private Geometry ReadPolygon(TileGeometryTransform tgs, IList<uint> geometry)
+        private Geometry ReadPolygon(ITileGeometryTransform tgs, IList<uint> geometry)
         {
             int currentIndex = 0; int currentX = 0; int currentY = 0;
             var sequences = ReadCoordinateSequences(tgs, geometry, ref currentIndex, ref currentX, ref currentY, 1);
@@ -204,7 +204,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
         }
 
         private CoordinateSequence[] ReadCoordinateSequences(
-            TileGeometryTransform tgs, IList<uint> geometry,
+            ITileGeometryTransform tgs, IList<uint> geometry,
             ref int currentIndex, ref int currentX, ref int currentY, int buffer = 0, bool forPoint = false)
         {
             (var command, int count) = ParseCommandInteger(geometry[currentIndex]);
@@ -276,7 +276,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
             return sequences.ToArray();
         }
 
-        private CoordinateSequence[] ReadSinglePointSequences(TileGeometryTransform tgs, IList<uint> geometry,
+        private CoordinateSequence[] ReadSinglePointSequences(ITileGeometryTransform tgs, IList<uint> geometry,
             int numSequences, ref int currentIndex, ref int currentX, ref int currentY)
         {
             var res = new CoordinateSequence[numSequences];
@@ -294,7 +294,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
             return res;
         }
 
-        private void TransformOffsetAndAddToSequence(TileGeometryTransform tgs, (int x, int y) localPosition, CoordinateSequence sequence, int index)
+        private void TransformOffsetAndAddToSequence(ITileGeometryTransform tgs, (int x, int y) localPosition, CoordinateSequence sequence, int index)
         {
             var (longitude, latitude) = tgs.TransformInverse(localPosition.x, localPosition.y);
             sequence.SetOrdinate(index, Ordinate.X, longitude);

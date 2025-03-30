@@ -259,7 +259,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
             return null;
         }
 
-        private static void EncodeTo(List<uint> destination, IPuntal puntal, TileGeometryTransform tgt)
+        private static void EncodeTo(List<uint> destination, IPuntal puntal, ITileGeometryTransform tgt)
         {
             const int CoordinateIndex = 0;
 
@@ -296,7 +296,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
             destination[moveToIndex] = GenerateCommandInteger(MapboxCommandType.MoveTo, (destination.Count - moveToIndex) / 2);
         }
 
-        private static void EncodeTo(List<uint> destination, ILineal lineal, uint minLinealExtent, TileGeometryTransform tgt)
+        private static void EncodeTo(List<uint> destination, ILineal lineal, uint minLinealExtent, ITileGeometryTransform tgt)
         {
             bool HasValidLength((long x, long y) tpl) 
                 => tpl.x >= minLinealExtent || tpl.y >= minLinealExtent;
@@ -311,7 +311,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
             }
         }
 
-        private static void EncodeTo(List<uint> destination, IPolygonal polygonal, uint minPolygonalExtent, TileGeometryTransform tgt)
+        private static void EncodeTo(List<uint> destination, IPolygonal polygonal, uint minPolygonalExtent, ITileGeometryTransform tgt)
         {
             bool HasValidExtent((long x, long y) tpl)
                 => (tpl.x >= minPolygonalExtent && tpl.y > 0) ||
@@ -344,7 +344,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
             }
         }
 
-        private static void EncodeTo(List<uint> destination, CoordinateSequence sequence, TileGeometryTransform tgt,
+        private static void EncodeTo(List<uint> destination, CoordinateSequence sequence, ITileGeometryTransform tgt,
             ref int currentX, ref int currentY,
             bool ring = false, bool ccw = false)
         {
