@@ -32,9 +32,9 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
         /// <param name="stream">Vector tile stream.</param>
         /// <param name="tileDefinition">Tile information.</param>
         /// <returns></returns>
-        public VectorTile Read(Stream stream, Tiles.Tile tileDefinition, Func<Tiles.Tile, uint, ITileGeometryTransform> tgtFactory = null)
+        public VectorTile Read(Stream stream, Tiles.Tile tileDefinition)
         {
-            return Read(stream, tileDefinition, null, tgtFactory);
+            return Read(stream, tileDefinition, null);
         }
 
         /// <summary>
