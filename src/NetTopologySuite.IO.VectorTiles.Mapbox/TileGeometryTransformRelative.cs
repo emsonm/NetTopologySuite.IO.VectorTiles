@@ -9,7 +9,7 @@ namespace NetTopologySuite.IO.VectorTiles.Mapbox
     /// <summary>
     /// A transformation utility from WGS84 coordinates to a local tile coordinate system in pixel
     /// </summary>
-    internal struct TileGeometryTransformRelative : ITileGeometryTransform
+    public struct TileGeometryTransformRelative : ITileGeometryTransform
     {
         private readonly Tiles.Tile _tile;
         private readonly uint _extent;
